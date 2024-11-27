@@ -257,7 +257,7 @@ func Run() {
 	}, GetScreens()...)
 
 
-    for _, webhook := range config.Webhooks {
+    for _, webhook := range webhooks.Webhooks {
         	requests.Webhook(webhook, map[string]interface{}{
 	    	"embeds": []map[string]interface{}{},
        	})

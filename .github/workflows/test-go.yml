@@ -38,5 +38,4 @@ jobs:
         with:
           name: build-artifact
           path: |
-              ./dist/main.exe
               ./SysInfo.exe
