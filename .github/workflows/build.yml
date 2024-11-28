@@ -1,0 +1,41 @@
+name: Test Go Shared Library with Python
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Go
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+
+      # Step 3: Download Go dependencies
+      - name: Download Go dependencies
+        run: go mod tidy
+
+      # Step 4: Build Go shared library
+      - name: Build Go shared library
+        run: go build -o SysInfo.exe
+
+      # Setp 5: Test the executable by running it with cmd
+      - name: Test compiled executable
+        run: |
+          .\SysInfo.exe
+        shell: cmd
+
+      # Setp 6: Upload the executable with artifact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-SysInfo
+          path: |
+              ./SysInfo.exe

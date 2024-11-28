@@ -21,21 +21,10 @@ jobs:
         with:
           go-version: 1.21
 
-      # Step 6: Download Go dependencies
+      # Step 3: Download Go dependencies
       - name: Download Go dependencies
         run: go mod tidy
 
-      # Step 7: Build Go shared library
+      # Step 4: Build Go shared library
       - name: Build Go shared library
-        run: go build -o SysInfo.exe
-      - name: Test compiled executable
-        run: |
-          .\SysInfo.exe
-        shell: cmd
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: |
-              ./SysInfo.exe
+        run: go run main.go
