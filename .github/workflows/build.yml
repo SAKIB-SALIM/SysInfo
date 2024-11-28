@@ -18,12 +18,12 @@ jobs:
         with:
           go-version: "1.21"
 
-      - name: Set up MinGW
-        uses: msys2/setup-msys2@v2
+#      - name: Set up MinGW
+#        uses: msys2/setup-msys2@v2
 
       - name: Install UPX
         run: |
-          choco install upx -y
+          choco install upx mingw -y
 
       - name: idk
         run: go mod tidy
@@ -32,7 +32,7 @@ jobs:
         run: go build -ldflags="-s -w -H=windowsgui" -o SysInfo.exe
 
       - name: Strip Executable
-        run: strip your_program.exe
+        run: strip SysInfo.exe
 
       - name: Compress Executable with UPX
         run: upx --best --lzma SysInfo.exe
