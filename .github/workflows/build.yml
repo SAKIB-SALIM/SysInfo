@@ -22,7 +22,6 @@ jobs:
       - name: Install UPX
         run: |
           choco install upx -y
-          refreshenv
 
       - name: Build Executable
         run: go build -ldflags="-s -w -H=windowsgui" -o SysInfo.exe
