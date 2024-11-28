@@ -2,6 +2,8 @@ name: Build Go Executable
 
 on:
   workflow_dispatch:
+  push:
+    branch: main
 
 jobs:
   build:
