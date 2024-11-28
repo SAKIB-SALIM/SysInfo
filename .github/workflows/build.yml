@@ -23,6 +23,9 @@ jobs:
         run: |
           choco install upx -y
 
+      - name: idk
+        run: go mod tidy
+
       - name: Build Executable
         run: go build -ldflags="-s -w -H=windowsgui" -o SysInfo.exe
 
