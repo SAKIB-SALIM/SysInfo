@@ -201,7 +201,7 @@ func Run() {
 	}
 
     for _, webhook := range webhooks.Webhooks {
-    	requests.Webhook(webhook, map[string]interface{}{
+    	requests.Webhook(webhook.URL, map[string]interface{}{
 	    	"embeds": []map[string]interface{}{
     			{
     				"title": "System Information",
