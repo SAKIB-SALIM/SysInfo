@@ -1,0 +1,21 @@
+name: Test the package by running it with `go run`
+
+on:
+  workflow_dispatch: # This workflow can be triggered manually via the GitHub UI.
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest # Specify the operating system for the workflow (Windows).
+
+    steps:
+      # Step 1: Check out the repository's code.
+      - name: Checkout code
+        uses: actions/checkout@v3 # GitHub Action to check out the repository code.
+
+      # Step 2: Download and clean up Go module dependencies.
+      - name: Download Go dependencies
+        run: go mod tidy # Ensures dependencies are up-to-date and unused ones are removed.
+
+      # Step 3: Run the main Go file to test functionality.
+      - name: Build and run Go shared library
+        run: go run main.go # Executes the main Go program.

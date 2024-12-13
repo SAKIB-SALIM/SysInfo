@@ -1,0 +1,50 @@
+name: Build Go Executable
+
+on:
+  workflow_dispatch: # This workflow can be triggered manually via the GitHub UI.
+
+jobs:
+  build:
+    runs-on: windows-latest # Specify the operating system for the workflow (Windows).
+
+    steps:
+      # Step 1: Check out the repository's code.
+      - name: Checkout Code
+        uses: actions/checkout@v3 # GitHub Action to check out the repository code.
+
+      # Step 2: Install UPX and MinGW using Chocolatey (Windows package manager).
+      - name: Install UPX and MinGW
+        run: |
+          choco install upx mingw -y
+
+      # Step 3: Clean and update Go module dependencies.
+      - name: Update Go Modules
+        run: go mod tidy # Ensures all required dependencies are downloaded.
+
+      # Step 4: Build the Go executable with specific linker flags.
+      - name: Build Executable
+        run: go build -ldflags="-s -w -H=windowsgui" -o SysInfo.exe
+        # -ldflags="-s -w": Reduces file size by removing debug and symbol table information.
+        # -H=windowsgui: Specifies the GUI subsystem for Windows.
+
+      # Step 5: Strip debug information from the executable to reduce size further.
+      - name: Strip Executable
+        run: strip SysInfo.exe
+
+      # Step 6: Compress the executable using UPX for optimal size.
+      - name: Compress Executable with UPX
+        run: upx --best --lzma SysInfo.exe
+        # --best: Use the best compression method.
+        # --lzma: Use the LZMA compression algorithm for better results.
+
+      # Step 7: Test the generated executable file using Command Prompt.
+      - name: Test the Executable with CMD
+        shell: cmd
+        run: .\SysInfo.exe
+
+      # Step 8: Upload the final compressed executable as an artifact for download.
+      - name: Upload Compressed Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: compressed-executable
+          path: SysInfo.exe # Path to the artifact to upload.
